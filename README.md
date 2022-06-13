@@ -95,7 +95,7 @@ $ sysctl -a
 $ sudo net.ipv4.conf.default.rp_filter=1
  
 # change them permanently 
-$ vim /etc/sysctl.conf
+$ nano /etc/sysctl.conf
 # edit
 
 # load 
