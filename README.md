@@ -7,100 +7,153 @@ Assalamualaikum Warahmatullahi Wabarakatuh, so now i will explain a simple or ea
 ### sysctl is an interface that allows you to make changes to a running Linux kernel. With /etc/sysctl.conf you can configure various Linux networking and system settings such as:
 
 * Limit network-transmitted configuration for IPv4
-* Limit network-transmitted configuration for IPv6 
-* Turn on execshield protection 
+* Limit network-transmitted configuration for IPv6  
 * Prevent against the common ‘syn flood attack’
 * Turn on source IP address verification 
 * Prevents a cracker from using a spoofing attack against the IP address of the server 
 * Logs several types of suspicious packets, such as spoofed packets, source-routed packets, and redirects.
 
-# Sample /etc/sysctl.conf for Ubuntu 22.04 LTS
-
-#/etc/sysctl.conf - Configuration file for setting system variables. <br>
-#See /etc/sysctl.d/ for additional system variables. <br>
+### Sample /etc/sysctl.conf for Ubuntu 22.04 LTS
+```python
+#/etc/sysctl.conf - Configuration file for setting system variables. 
+#See /etc/sysctl.d/ for additional system variables. 
 #See sysctl.conf (5) for information. 
 
 #kernel.domainname = example.com
 
-#Uncomment the following to stop low-level messages on console <br>
+#Uncomment the following to stop low-level messages on console 
 #kernel.printk = 3 4 1 3
 
-###################################################################<br>
+###################################################################
 #Functions previously found in netbase
 
-#Uncomment the next two lines to enable Spoof protection (reverse-path filter)<br>
-#Turn on Source Address Verification in all interfaces to<br>
-#prevent some spoofing attacks<br>
-#net.ipv4.conf.default.rp_filter=1<br>
+#Uncomment the next two lines to enable Spoof protection (reverse-path filter)
+#Turn on Source Address Verification in all interfaces to
+#prevent some spoofing attacks
+#net.ipv4.conf.default.rp_filter=1
 #net.ipv4.conf.all.rp_filter=1
 
-#Uncomment the next line to enable TCP/IP SYN cookies<br>
-#See http://lwn.net/Articles/277146/<br>
-#Note: This may impact IPv6 TCP sessions too<br>
+#Uncomment the next line to enable TCP/IP SYN cookies
+#See http://lwn.net/Articles/277146/
+#Note: This may impact IPv6 TCP sessions too
 #net.ipv4.tcp_syncookies=1
 
-#Uncomment the next line to enable packet forwarding for IPv4<br>
+#Uncomment the next line to enable packet forwarding for IPv4
 #net.ipv4.ip_forward=0
 
-#Uncomment the next line to enable packet forwarding for IPv6<br>
-#Enabling this option disables Stateless Address Autoconfiguration<br>
-#based on Router Advertisements for this host<br>
+#Uncomment the next line to enable packet forwarding for IPv6
+#Enabling this option disables Stateless Address Autoconfiguration
+#based on Router Advertisements for this host
 #net.ipv6.conf.all.forwarding=1
 
 
-###################################################################<br>
-#Additional settings - these settings can improve the network<br>
-#security of the host and prevent against some network attacks<br>
-#including spoofing attacks and man in the middle attacks through<br>
-#redirection. Some network environments, however, require that these<br>
+###################################################################
+#Additional settings - these settings can improve the network 
+#security of the host and prevent against some network attacks
+#including spoofing attacks and man in the middle attacks through
+#redirection. Some network environments, however, require that these
 #settings are disabled so review and enable them as needed.
 #
-#Do not accept ICMP redirects (prevent MITM attacks)<br>
-#net.ipv4.conf.all.accept_redirects = 0<br>
-#net.ipv6.conf.all.accept_redirects = 0<br>
+#Do not accept ICMP redirects (prevent MITM attacks)
+#net.ipv4.conf.all.accept_redirects = 0
+#net.ipv6.conf.all.accept_redirects = 0
 #_or_<br>
-#Accept ICMP redirects only for gateways listed in our default<br>
-#gateway list (enabled by default)<br>
-#net.ipv4.conf.all.secure_redirects = 1<br>
+#Accept ICMP redirects only for gateways listed in our default
+#gateway list (enabled by default)
+#net.ipv4.conf.all.secure_redirects = 1
 #
-#Do not send ICMP redirects (we are not a router)<br>
+#Do not send ICMP redirects (we are not a router)
 #net.ipv4.conf.all.send_redirects = 0
 #
-#Do not accept IP source route packets (we are not a router)<br>
-#net.ipv4.conf.all.accept_source_route = 0<br>
+#Do not accept IP source route packets (we are not a router)
+#net.ipv4.conf.all.accept_source_route = 0
 #net.ipv6.conf.all.accept_source_route = 0
 #
-#Log Martian Packets<br>
+#Log Martian Packets
 #net.ipv4.conf.all.log_martians = 1
 #
 
-###################################################################<br>
-#Magic system request Key<br>
-#0=disable, 1=enable all, >1 bitmask of sysrq functions<br>
-#See https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html<br>
-#for what other values do<br>
+###################################################################
+#Magic system request Key
+#0=disable, 1=enable all, >1 bitmask of sysrq functions
+#See https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html
+#for what other values do
 #kernel.sysrq=438
+```
+### STEP BY STEP CONFIGURATION
 
-# STEP BY STEP CONFIGURATION
-
-## Enable/Disable packet forwarding for IPv4
-
-How to check the status of ip forward whether enable or disable there are two commands<br>
- cat/proc/sys/net/ipv4/ip_forward<br>
- sysctl net.ipv4.ip_forward
-
-How to setup temporarily disable or enable<br>
- echo 1>/proc/sys/net/ipv4/ip_forward<br>
- sysctl -w net.ipv4.ip_forward = 1
+#### Example usage
+```python
+# check all existing sysctl parameters
+$ sysctl -a
  
-The way to setup disable or enable it by editing it permanently<br>
- nano /etc/sysctl.conf<br>
- Uncomment hashtags to enable edit<br>
- To enable the changes made in sysctl > sysctl -p /etc/sysctl.conf 
+# change them temporary
+$ sudo net.ipv4.conf.default.rp_filter=1
  
+# change them permanently 
+$ vim /etc/sysctl.conf
+# edit
+...
+# load 
+$ sysctl -p /etc/sysctl.conf
+```
+#### ReversePath Filtering
+Reverse path filtering is a mechanism adopted by the Linux kernel, as well as most of the networking devices out there to check whether a receiving packet source address is routable. So in other words, when a machine with reverse path filtering enabled receives a packet, the machine will first check whether the source of the received packet is reachable through the interface it came in. If it is routable through the interface which it came, then the machine will accept the packet.
+If it is not routable through the interface, which it came, then the machine will drop that packet.
+```python
+#IPv4
+$ sysctl -w net.ipv4.conf.default.rp_filter=1
+#IPv6
+$ sysctl -w net.ipv4.conf.all.rp_filter=1
+```
 
+#### TCP/IP SYN cookies 
+SYN cookies is an IP Spoofing attack mitigation technique whereby server replies to TCP SYN requests with crafted SYN-ACKs, without creating a new TCB for the TCP connection. A TCB is created for the respective TCP connection only when the client replies to this crafted response. This technique is used to protect the server’s resources from filling up under TCP SYN floods.
+```python
+$ sysctl -w net.ipv4.tcp_syncookies=1 
+```
 
+#### IP Forwarding for IPv4 & IPv6
+You can configure your Linux distribution to function as a router and connect different networks together. To do this, you need to enable IP forwarding in the configuration file.
+```python
+#IPv4
+$ sudo sysctl -w net.ipv4.ip_forward=0
 
+#IPv6
+$ sudo sysctl -w net.ipv6.conf.all.forwarding=0
+```
+
+#### Redirects
+Redirects let one machine tell another machine to route traffic through a node other than what's in its routing table.
+```python
+#IPv4
+$ sysctl -w net.ipv4.conf.all.accept_redirects=0
+
+#IPv6
+$ sysctl -w net.ipv6.conf.all.accept_redirects=0
+```
+
+#### Secure Redirects
+```python
+Prevents hijacking of routing path by only allowing redirects from gateways known in our routing table.
+$ sysctl -w net.ipv4.conf.all.secure_redirects=1
+```
+
+#### Send Redirects
+This command disables sending of all IPv4 ICMP redirected packets on all interfaces
+```python
+$ sysctl -w net.ipv4.conf.all.send_redirects=0
+```
+
+#### Accept Source Route
+Source routing is an Internet Protocol mechanism that allows an IP packet to carry information, a list of addresses, that tells a router the path the packet must take. There is also an option to record the hops as the route is traversed. The list of hops taken, the "route record", provides the destination with a return path to the source. This allows the source (the sending host) to specify the route, loosely or strictly, ignoring the routing tables of some or all of the routers. It can allow a user to redirect network traffic for malicious purposes. Therefore, source-based routing should be disabled.
+```python
+#IPv4
+$ sysctl -w net.ipv4.conf.all.accept_source_route=0
+
+#IPv6
+$ sysctl -w net.ipv6.conf.all.accept_source_route=0
+```
 
 
 
