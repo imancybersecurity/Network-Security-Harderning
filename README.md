@@ -121,10 +121,10 @@ $ sysctl -w net.ipv4.tcp_syncookies=1
 You can configure your Linux distribution to function as a router and connect different networks together. To do this, you need to enable IP forwarding in the configuration file.
 ```python
 #IPv4
-$ sudo sysctl -w net.ipv4.ip_forward=0
+$ sysctl -w net.ipv4.ip_forward=0
 
 #IPv6
-$ sudo sysctl -w net.ipv6.conf.all.forwarding=0
+$ sysctl -w net.ipv6.conf.all.forwarding=0
 ```
 
 #### Accept Redirects
