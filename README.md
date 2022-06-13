@@ -97,9 +97,13 @@ $ sudo net.ipv4.conf.default.rp_filter=1
 # change them permanently 
 $ vim /etc/sysctl.conf
 # edit
-...
+
 # load 
 $ sysctl -p /etc/sysctl.conf
+
+# Disable=0
+# Enable with Strict Mode=1
+# Enable with Loose Mode=2
 ```
 #### Reverse Path Filtering
 Reverse path filtering is a mechanism adopted by the Linux kernel, as well as most of the networking devices out there to check whether a receiving packet source address is routable. So in other words, when a machine with reverse path filtering enabled receives a packet, the machine will first check whether the source of the received packet is reachable through the interface it came in. If it is routable through the interface which it came, then the machine will accept the packet.
@@ -146,11 +150,11 @@ $ sysctl -w net.ipv4.conf.all.secure_redirects=1
 #### Send Redirects
 This command disables sending of all IPv4 ICMP redirected packets on all interfaces
 ```python
-$ sysctl -w net.ipv4.conf.all.send_redirects=0
+$ sysctl -w net.ipv4.conf.all.send_redirects=1
 ```
 
 #### Accept Source Route
-Source routing is an Internet Protocol mechanism that allows an IP packet to carry information, a list of addresses, that tells a router the path the packet must take. There is also an option to record the hops as the route is traversed. The list of hops taken, the "route record", provides the destination with a return path to the source. This allows the source (the sending host) to specify the route, loosely or strictly, ignoring the routing tables of some or all of the routers. It can allow a user to redirect network traffic for malicious purposes. Therefore, source-based routing should be disabled.
+Source routing is an Internet Protocol mechanism that allows an IP packet to carry information, a list of addresses, that tells a router the path the packet must take. There is also an option to record the hops as the route is traversed. The list of hops taken, the "route record", provides the destination with a return path to the source. This allows the source (the sending host) to specify the route, loosely or strictly, ignoring the routing tables of some or all of the routers. It can allow a user to redirect network traffic for malicious purposes.
 ```python
 #IPv4
 $ sysctl -w net.ipv4.conf.all.accept_source_route=0
