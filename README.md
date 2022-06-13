@@ -6,12 +6,14 @@ Assalamualaikum Warahmatullahi Wabarakatuh, so now i will explain a simple or ea
 
 ### sysctl is an interface that allows you to make changes to a running Linux kernel. With /etc/sysctl.conf you can configure various Linux networking and system settings such as:
 
-* Limit network-transmitted configuration for IPv4
-* Limit network-transmitted configuration for IPv6  
-* Prevent against the common ‘syn flood attack’
-* Turn on source IP address verification 
-* Prevents a cracker from using a spoofing attack against the IP address of the server 
-* Logs several types of suspicious packets, such as spoofed packets, source-routed packets, and redirects.
+* Reverse Path Filtering
+* TCP/IP SYN cookies
+* IP Forwarding for IPv4 & IPv6
+* Accept Redirects
+* Secure Redirects
+* Send Redirects
+* Accept Source Route
+
 
 ### Sample /etc/sysctl.conf for Ubuntu 22.04 LTS
 ```python
@@ -97,7 +99,7 @@ $ vim /etc/sysctl.conf
 # load 
 $ sysctl -p /etc/sysctl.conf
 ```
-#### ReversePath Filtering
+#### Reverse Path Filtering
 Reverse path filtering is a mechanism adopted by the Linux kernel, as well as most of the networking devices out there to check whether a receiving packet source address is routable. So in other words, when a machine with reverse path filtering enabled receives a packet, the machine will first check whether the source of the received packet is reachable through the interface it came in. If it is routable through the interface which it came, then the machine will accept the packet.
 If it is not routable through the interface, which it came, then the machine will drop that packet.
 ```python
@@ -123,7 +125,7 @@ $ sudo sysctl -w net.ipv4.ip_forward=0
 $ sudo sysctl -w net.ipv6.conf.all.forwarding=0
 ```
 
-#### Redirects
+#### Accept Redirects
 Redirects let one machine tell another machine to route traffic through a node other than what's in its routing table.
 ```python
 #IPv4
@@ -134,8 +136,8 @@ $ sysctl -w net.ipv6.conf.all.accept_redirects=0
 ```
 
 #### Secure Redirects
-```python
 Prevents hijacking of routing path by only allowing redirects from gateways known in our routing table.
+```python
 $ sysctl -w net.ipv4.conf.all.secure_redirects=1
 ```
 
