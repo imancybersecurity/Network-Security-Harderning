@@ -111,6 +111,7 @@ If it is not routable through the interface, which it came, then the machine wil
 ```python
 #IPv4
 $ sysctl -w net.ipv4.conf.default.rp_filter=1
+
 #IPv6
 $ sysctl -w net.ipv4.conf.all.rp_filter=1
 ```
